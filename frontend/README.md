@@ -1,6 +1,6 @@
 # 🚀 Hipster-Tools Frontend - A Magical Blend of NestJS & VueJS 🧙‍♂️
 
-Welcome to the frontend of Hipster-Tools, a web app brewed with NestJS and VueJS. It's a mystical tool for all your Tabletop RPG adventures. This project has been conjured from the essence of a boilerplate, and it's ready to roll the dice!
+Welcome to the frontend of HipsterTools, a web app brewed with NestJS and VueJS. It's a mystical tool for all your Tabletop RPG adventures. This project has been conjured from the essence of a boilerplate, and it's ready to roll the dice!
 
 ## 🎲 Vue 3 Boilerplate - Vite, Pinia, Vue Router & Tailwind CSS 🎩
 
