@@ -1,8 +1,7 @@
 <script>
   import bgImage from '@/assets/img/login-background.jpg';
+  import bgVideo from '@/assets/video/login-background.mp4';
   import IconVue from '../components/other/Icon.vue';
-  import bartoszImage from '@/assets/img/profile-pictures/bartosz.jpg';
-  import matiImage from '@/assets/img/profile-pictures/mati.png';
 
   export default {
     components: {
@@ -11,22 +10,7 @@
     data() {
       return {
         bgImage,
-        users: [
-          {
-            name: "Bartosz",
-            id: 1,
-            image: bartoszImage,
-            online: false,
-            appAmount: 1,
-          },
-          {
-            name: "Mati",
-            id: 2,
-            image: matiImage,
-            online: true,
-            appAmount: 0,
-          },
-        ],
+        users: [],
         showModal: false,
         chosenUser: null,
       };
@@ -55,10 +39,13 @@
   <div>
     <div class="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat"
       :style="{ backgroundImage: `url(${bgImage})` }">
+      <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover object-center z-0">
+        <source src="@/assets/video/login-background.mp4" type="video/mp4">
+      </video>
       <div class="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
         <div class="text-white">
           <div class="mb-8 flex flex-col items-center">
-            <img src="@/assets/img/logo.png" class="mb-4" width="150" alt="" srcset="" />
+            <img src="@/assets/img/logo.png" class="mb-4 cursor-pointer" width="150" alt="" srcset="" @click="$router.push('/')" />
             <h1 class="text-gray-300 text-lg">Zaloguj się</h1>
           </div>
           <div class="flex flex-col max-w-md space-y-5">
@@ -75,10 +62,10 @@
               <span class="px-4">Lub</span>
               <span class="w-full border border-black"></span>
             </div>
-            <button
+            <button @click="$router.push('/')"
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black relative">
               <IconVue iconName="KeyboardBackspace" class="absolute left-3 w-5 h-5"></IconVue>
-              <span>Powrót</span>
+              <span>Strona Główna</span>
             </button>
           </div>
         </div>

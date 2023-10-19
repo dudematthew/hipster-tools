@@ -18,18 +18,28 @@ export default {
 
 <template>
     <header class="bg-dark-500 text-white shadow-lg h-24 hidden md:flex">
-        <a href="" class="flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8">
+        <router-link to="/" class="flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8">
             <img class="h-16 w-auto" src="@/assets/img/logo.png" alt="" />
-        </a>
+        </router-link>
         <nav class="header-links contents font-semibold text-base lg:text-lg">
             <ul class="flex items-center ml-4 xl:ml-8 mr-auto">
                 <li class="p-3 xl:p-6 active">
-                    <a href="">
+                    <router-link to="/">
                         <span>Strona Główna</span>
-                    </a>
+                    </router-link>
+                </li>
+                <li class="p-3 xl:p-6">
+                    <router-link to="/player">
+                        <span>Panel Gracza</span>
+                    </router-link>
+                </li>
+                <li class="p-3 xl:p-6">
+                    <router-link to="/gm">
+                        <span>Panel GM'a</span>
+                    </router-link>
                 </li>
                 <!-- <li class="p-3 xl:p-6">
-                    <a href="" class="flex items-center">
+                    <router-link to="" class="flex items-center">
                         <span>Pages</span>
                         <svg class="h-3 opacity-30 ml-2 svg-inline--fa fa-chevron-down fa-w-14 fa-7x" aria-hidden="true"
                             focusable="false" data-prefix="far" data-icon="chevron-down" role="img"
@@ -38,7 +48,7 @@ export default {
                                 d="M441.9 167.3l-19.8-19.8c-4.7-4.7-12.3-4.7-17 0L224 328.2 42.9 147.5c-4.7-4.7-12.3-4.7-17 0L6.1 167.3c-4.7 4.7-4.7 12.3 0 17l209.4 209.4c4.7 4.7 12.3 4.7 17 0l209.4-209.4c4.7-4.7 4.7-12.3 0-17z">
                             </path>
                         </svg>
-                    </a>
+                    </router-link>
                 </li> -->
             </ul>
         </nav>
@@ -72,7 +82,8 @@ export default {
             </path>
           </svg>
         </a> -->
-            <button class="bg-primary-400 hover:bg-primary-300 focus:bg-primary-400 text-black font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
+            <button @click="$router.push('/login')"
+                class="bg-primary-400 hover:bg-primary-300 focus:bg-primary-400 text-black font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
                 Zaloguj się
             </button>
         </div>

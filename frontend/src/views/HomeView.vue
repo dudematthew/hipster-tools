@@ -46,7 +46,7 @@
             </p>
           </div>
           <div class="p-6 pt-0">
-            <router-link class="text-primary-400 !transition-colors hover:!text-pink-500" :to="panel.link">
+            <router-link class="text-primary-400" :to="panel.link">
               <button
                 class="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-primary-400 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="button" data-ripple-dark="true">
