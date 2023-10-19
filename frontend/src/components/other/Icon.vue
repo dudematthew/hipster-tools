@@ -10,33 +10,37 @@
     import SvgIcon from '@jamescoyle/vue-icon'
 
     import {
+        mdiFlask,
         mdiHelp,
-    } from '@mdi/js'
+        mdiBottleTonicSkull,
+        mdiKeyboardBackspace,
+    } from '@mdi/js';
+
+    const icons = {
+        Help: mdiHelp,
+        Flask: mdiFlask,
+        BottleTonickSkull: mdiBottleTonicSkull,
+        KeyboardBackspace: mdiKeyboardBackspace,
+    };
 
     export default {
-        name: "IconVue",
-
+        name: 'IconVue',
         components: {
             SvgIcon,
-            mdiHelp,
         },
-
-        data () {
-            return {
-                path: mdiHelp,
-            }
-        },
-
         props: {
-            // Default icon
-            icon : {
+            iconName: {
                 type: String,
-                default: mdiHelp
-            }
+                default: 'Help',
+            },
         },
-
-        async mounted () {
-            this.path = this.icon;
+        data() {
+            return {
+                path: null,
+            };
         },
-    }
+        created() {
+            this.path = icons[this.iconName];
+        },
+    };
 </script>

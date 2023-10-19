@@ -10,8 +10,9 @@ const useServerStore = defineStore({
   actions: {
     async checkLoginStatus() {
       try {
-        const response = await axios.get("http://localhost:5000/api/check-login");
-        this.isLoggedIn = response.data.isLoggedIn;
+        // const response = await axios.get("http://localhost:5000/api/check-login");
+        // this.isLoggedIn = response.data.isLoggedIn;
+        this.isLoggedIn = false;
       } catch (error) {
         // Handle error
         console.error(error);

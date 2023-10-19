@@ -19,7 +19,7 @@ export default {
 <template>
     <header class="bg-dark-500 text-white shadow-lg h-24 hidden md:flex">
         <a href="" class="flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8">
-            <img class="h-20 w-20" src="@/assets/img/logo.png" alt="" />
+            <img class="h-16 w-auto" src="@/assets/img/logo.png" alt="" />
         </a>
         <nav class="header-links contents font-semibold text-base lg:text-lg">
             <ul class="flex items-center ml-4 xl:ml-8 mr-auto">
@@ -28,17 +28,7 @@ export default {
                         <span>Strona Główna</span>
                     </a>
                 </li>
-                <li class="p-3 xl:p-6">
-                    <a href="">
-                        <span>Turnieje</span>
-                    </a>
-                </li>
-                <li class="p-3 xl:p-6">
-                    <a href="https://dsc.gg/polskie-legendy-apex" target="_blank">
-                        <span>Discord</span>
-                    </a>
-                </li>
-                <li class="p-3 xl:p-6">
+                <!-- <li class="p-3 xl:p-6">
                     <a href="" class="flex items-center">
                         <span>Pages</span>
                         <svg class="h-3 opacity-30 ml-2 svg-inline--fa fa-chevron-down fa-w-14 fa-7x" aria-hidden="true"
@@ -49,7 +39,7 @@ export default {
                             </path>
                         </svg>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </nav>
         <!-- <nav class="hidden xl:contents">
@@ -82,9 +72,35 @@ export default {
             </path>
           </svg>
         </a> -->
-            <button class="bg-white hover:bg-gray-200 text-black font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
+            <button class="bg-primary-400 hover:bg-primary-300 focus:bg-primary-400 text-black font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
                 Zaloguj się
             </button>
         </div>
     </header>
 </template>
+
+<style>
+  .header-links li span {
+    position: relative;
+    z-index: 0;
+  }
+
+  .header-links li span::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    bottom: 2px;
+    left: -4px;
+    right: -4px;
+    display: block;
+    height: 6px;
+  }
+
+  .header-links li.active span::before {
+    background-color: rgba(232, 69, 69, 0.8);
+  }
+
+  .header-links li:not(.active):hover span::before {
+    background-color: #515783;
+  }
+</style>

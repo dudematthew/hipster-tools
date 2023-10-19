@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import DiscordPanelView from '../views/DiscordPanelView.vue';
 import { useServerStore } from "@/stores/server";
 
 const router = createRouter({
@@ -15,9 +14,26 @@ const router = createRouter({
       },
     },
     {
-      path: "/about",
-      name: "about",
-      component: () => import("../views/AboutView.vue"),
+      path: "/player",
+      name: "player",
+      component: () => import("../views/PlayerView.vue"),
+      meta: {
+        requiresAuth: true, // Set to true if access is restricted
+      },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("../views/LoginView.vue"),
+      meta: {
+        requiresAuth: false, // Set to true if access is restricted
+      },
+    },
+    // 404
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      component: () => import("../views/404View.vue"),
       meta: {
         requiresAuth: false, // Set to true if access is restricted
       },
