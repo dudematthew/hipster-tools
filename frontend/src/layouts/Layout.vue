@@ -5,7 +5,9 @@
   } from "vue-router";
   import BaseLayout from "./BaseLayout.vue";
   import AuthLayout from "./AuthLayout.vue";
-  import { useServerStore } from "@/stores/server.js";
+  
+  import { mapStores } from 'pinia';
+  import { useServerStore } from '@/stores/server';
 
   export default {
     components: {
@@ -14,24 +16,16 @@
       BaseLayout,
       AuthLayout
     },
-    mounted() {
-        this.checkLoginStatus();
-    },
-    methods: {
-        async checkLoginStatus() {
-            try {
-                await useServerStore().checkLoginStatus();
-            } catch (error) {
-                // Handle error
-                console.error(error);
-            }
-        }
-    },
     computed: {
         isAuthenticated() {
             return useServerStore().isLoggedIn;
-        }
-    }
+        },
+    },
+    setup() {
+        const serverStore = useServerStore();
+
+        serverStore.fetchLoginStatus();
+    },
   };
 </script>
 

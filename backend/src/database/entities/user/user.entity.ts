@@ -11,6 +11,12 @@ export class UserEntity extends BaseEntity {
     @Column({ length: 32 })
     name: string;
 
+    @Column({ length: 128 })
+    password: string;
+
+    @Column({ length: 128, nullable: true })
+    image: string;
+
     @Column({ default: false, name: 'is_admin'})
     isAdmin: boolean;
 

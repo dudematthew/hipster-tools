@@ -40,7 +40,9 @@ async function bootstrap() {
   // Create your SQL datasource
   forestAdminAgent.addDataSource(createSqlDataSource(connectionString));
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 

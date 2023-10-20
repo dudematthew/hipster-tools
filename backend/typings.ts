@@ -17,6 +17,8 @@ export type Schema = {
       'is_admin': number;
       'created_at': string;
       'updated_at': string;
+      'password': string;
+      'image': string;
     };
     nested: {};
     flat: {};

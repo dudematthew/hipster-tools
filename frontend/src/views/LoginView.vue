@@ -1,7 +1,8 @@
 <script>
-  import bgImage from '@/assets/img/login-background.jpg';
-  import bgVideo from '@/assets/video/login-background.mp4';
+  import bgImage from '@/assets/img/login-background.png';
   import IconVue from '../components/other/Icon.vue';
+  
+  import { useServerStore } from '@/stores/server';
 
   export default {
     components: {
@@ -10,15 +11,19 @@
     data() {
       return {
         bgImage,
-        users: [],
         showModal: false,
         chosenUser: null,
+        password: "",
       };
     },
     computed: {
       userOptionButtonText () {
         return this.chosenUser ? this.chosenUser.name : "Wybierz użytkownika";
-      }
+      },
+      users () {
+        console.log(this.serverStore.userList);
+        return this.serverStore.userList;
+      },
     },
     methods: {
       openUserModal() {
@@ -30,7 +35,28 @@
       chooseUser(user) {
         this.chosenUser = user;
         this.closeUserModal();
+      },
+      async login() {
+        if (!this.chosenUser) return alert("Wybierz użytkownika!");
+        if (!this.password) return alert("Wprowadź hasło!");
+
+        const result = await this.serverStore.login(this.chosenUser.id, this.password);
+
+        if (result == 200 || result == 201) {
+          this.$router.push('/');
+        } else if (result == 401) {
+          alert("Nieprawidłowe hasło!");
+        } else {
+          alert("Wystąpił błąd!");
+        }
       }
+    },
+    setup() {
+      const serverStore = useServerStore();
+
+      serverStore.fetchUserList();
+
+      return { serverStore }
     },
   };
 </script>
@@ -45,15 +71,15 @@
       <div class="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
         <div class="text-white">
           <div class="mb-8 flex flex-col items-center">
-            <img src="@/assets/img/logo.png" class="mb-4 cursor-pointer" width="150" alt="" srcset="" @click="$router.push('/')" />
+            <img src="@/assets/img/logo.png" class="mb-4 cursor-pointer" width="160" alt="" srcset="" @click="$router.push('/')" />
             <h1 class="text-gray-300 text-lg">Zaloguj się</h1>
           </div>
           <div class="flex flex-col max-w-md space-y-5">
             <button
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white" @click="openUserModal">{{ userOptionButtonText }}</button>
-            <input type="password" placeholder="Wprowadź Hasło"
+            <input type="password" placeholder="Wprowadź Hasło" v-model="password"
               class="flex px-3 py-2 md:px-4 md:py-3 border-2 text-black border-black rounded-lg font-medium placeholder:font-normal" />
-            <button
+            <button @click="login()"
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black relative">
               <span>Zaloguj się</span>
             </button>

@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-import bartoszImage from '@/assets/img/profile-pictures/bartosz.jpg';
-import matiImage from '@/assets/img/profile-pictures/mati.png';
 
-const useServerStore = defineStore({
+const useServerStore = defineStore('server', {
   id: "server",
   state: () => ({
     isLoggedIn: false,
@@ -24,29 +22,44 @@ const useServerStore = defineStore({
     },
     async fetchUserList() {
       try {
-        // const response = await axios.get("http://localhost:5000/api/users");
-        // this.userList = response.data;
-        this.userList = [
-          {
-            name: "Bartosz",
-            id: 1,
-            image: bartoszImage,
-            online: false,
-            appAmount: 1,
-          },
-          {
-            name: "Mati",
-            id: 2,
-            image: matiImage,
-            online: true,
-            appAmount: 0,
-          },
-        ]
+        const response = await axios.get("http://localhost:3000/api/users");
+        console.log(response.data);
+        this.userList = response.data;
       } catch (error) {
         console.error(error);
         throw error;
       }
     },
+    async login(id, password) {
+      try {
+        const response = await axios.post("http://localhost:3000/api/auth/login", {
+          id,
+          password,
+        });
+        
+        // Get response status code
+        const statusCode = response.status;
+
+        console.log(response.status);
+
+        // If login success, set isLoggedIn to true
+        if (statusCode === 200 || statusCode === 201) {
+          this.isLoggedIn = true;
+        }
+
+        console.log(response);
+
+        return statusCode;
+
+      } catch (error) {
+        if (error.response) {
+          return error.response.status;
+        } else {
+          console.error(error);
+          throw error;
+        }
+      }
+    }
   },
 });
 

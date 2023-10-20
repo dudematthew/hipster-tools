@@ -1,5 +1,6 @@
 export interface UserInterface {
-    discordId: string;
-    email?: string;
+    id?: number;
+    name: string;
+    password: string;
     isAdmin?: boolean;
 }

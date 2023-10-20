@@ -6,6 +6,7 @@ import { SessionSerializer } from "./session.serializer";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "src/database/entities/user/user.entity";
 import { UserService } from "src/database/entities/user/user.service";
+import { AuthController } from "./auth.controller";
 
 
 @Module({
@@ -22,6 +23,7 @@ import { UserService } from "src/database/entities/user/user.service";
         SessionSerializer,
     ],
     controllers: [
+        AuthController,
     ],
     exports: [
         AuthService,
