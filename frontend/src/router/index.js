@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import { useServerStore } from "@/stores/server";
+import { useMainStore } from "@/stores/main";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,9 +44,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
+  const serverStore = useServerStore();
+  const mainStore = useMainStore();
 
-  if (requiresAuth && !useServerStore().isLoggedIn) {
-    // Redirect to login page or handle unauthorized access
+  serverStore.fetchProfile();
+
+  if (requiresAuth && !serverStore.isLoggedIn) {
+    // Store the route the user was trying to access
+    mainStore.setPreviousRoute(to.fullPath);
+    // Redirect to login page
     next("/login");
   } else {
     // Continue with the navigation

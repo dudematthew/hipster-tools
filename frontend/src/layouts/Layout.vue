@@ -24,7 +24,7 @@
     setup() {
         const serverStore = useServerStore();
 
-        serverStore.fetchLoginStatus();
+        serverStore.fetchProfile();
     },
   };
 </script>

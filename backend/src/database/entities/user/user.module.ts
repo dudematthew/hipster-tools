@@ -3,6 +3,7 @@ import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { forwardRef } from "@nestjs/common";
+import { UserController } from "./user.controller";
 
 @Module({
     imports: [
@@ -15,6 +16,9 @@ import { forwardRef } from "@nestjs/common";
     ],
     exports: [
         UserService,
+    ],
+    controllers: [
+        UserController,
     ],
 })
 export class UserModule {}

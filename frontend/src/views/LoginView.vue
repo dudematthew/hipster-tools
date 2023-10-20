@@ -3,6 +3,7 @@
   import IconVue from '../components/other/Icon.vue';
   
   import { useServerStore } from '@/stores/server';
+  import { useMainStore } from '@/stores/main';
 
   export default {
     components: {
@@ -14,6 +15,7 @@
         showModal: false,
         chosenUser: null,
         password: "",
+        passwordMessage: null,
       };
     },
     computed: {
@@ -23,6 +25,17 @@
       users () {
         console.log(this.serverStore.userList);
         return this.serverStore.userList;
+      },
+      secondsToLoginEnabled () {
+        // Return seconds to login if login is disabled
+        if (this.loginDisabled) {
+          return Math.ceil((this.serverStore.loginDisabledDate - Date.now()) / 1000);
+        } else {
+          return 0;
+        }
+      },
+      loginDisabled () {
+        return this.serverStore.loginDisabled;
       },
     },
     methods: {
@@ -36,16 +49,44 @@
         this.chosenUser = user;
         this.closeUserModal();
       },
+      logUsers() {
+        console.log(this.users);
+        this.serverStore.fetchUserList();
+      },
       async login() {
-        if (!this.chosenUser) return alert("Wybierz użytkownika!");
-        if (!this.password) return alert("Wprowadź hasło!");
+
+        if (!this.chosenUser) {
+          this.openUserModal();
+          return;
+        }
+
+        if (this.password == "") {
+          this.passwordMessage = "Wprowadź hasło";
+          return;
+        }
 
         const result = await this.serverStore.login(this.chosenUser.id, this.password);
 
-        if (result == 200 || result == 201) {
-          this.$router.push('/');
+        if (result == 200) {
+          const mainStore = useMainStore();
+          if (mainStore.previousRoute) {
+            // Redirect to the stored route
+            this.$router.push(mainStore.previousRoute);
+            // Clear the stored route
+            mainStore.clearPreviousRoute();
+          } else {
+            // Redirect to home page
+            this.$router.push('/');
+          }
         } else if (result == 401) {
-          alert("Nieprawidłowe hasło!");
+          this.passwordMessage = "Nieprawidłowe hasło";
+        } else if (result == 429) {
+          // Too many login attempts
+          await this.$refs.loginCountdown.restart();
+          this.passwordMessage = "Zbyt wiele prób logowania";
+
+          // Clear 
+
         } else {
           alert("Wystąpił błąd!");
         }
@@ -58,6 +99,13 @@
 
       return { serverStore }
     },
+    watch: {
+      loginDisabledTimestamp (value) {
+        if (!value) {
+          this.passwordMessage = null;
+        }
+      }
+    }
   };
 </script>
 
@@ -70,29 +118,54 @@
       </video>
       <div class="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
         <div class="text-white">
+
           <div class="mb-8 flex flex-col items-center">
             <img src="@/assets/img/logo.png" class="mb-4 cursor-pointer" width="160" alt="" srcset="" @click="$router.push('/')" />
             <h1 class="text-gray-300 text-lg">Zaloguj się</h1>
           </div>
+
           <div class="flex flex-col max-w-md space-y-5">
-            <button
+
+            <button :class="{'mb-4': passwordMessage}"
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white" @click="openUserModal">{{ userOptionButtonText }}</button>
-            <input type="password" placeholder="Wprowadź Hasło" v-model="password"
-              class="flex px-3 py-2 md:px-4 md:py-3 border-2 text-black border-black rounded-lg font-medium placeholder:font-normal" />
-            <button @click="login()"
+
+            <!-- <input type="password" placeholder="Wprowadź Hasło" v-model="password" @keypress.enter="login()"
+              class="flex px-3 py-2 md:px-4 md:py-3 border-2 text-black border-black rounded-lg font-medium placeholder:font-normal" /> -->
+
+            <div class="relative">
+              <p v-if="passwordMessage" class="absolute top-[-25px] text-red-500">{{ passwordMessage }}</p>
+              <input type="password" placeholder="Wprowadź Hasło" v-model="password" @keypress.enter="login()" @input="passwordMessage = null"
+                :class="{'border-red-500': passwordMessage}"
+                class="flex px-3 py-2 md:px-4 md:py-3 border-2 text-black border-black rounded-lg font-medium placeholder:font-normal" />
+            </div>
+
+            <button @click="login()" :disabled="loginDisabled"
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black relative">
-              <span>Zaloguj się</span>
+              <span>
+                <template v-if="loginDisabled">
+                  <IconVue iconName="TimerSand" class="absolute left-3 w-5 h-5"></IconVue>
+                  <VueCountdown ref="loginCountdown" :time="60000" v-slot="{ seconds }">
+                    {{ seconds != 0 ? seconds : "Zaloguj się" }}
+                  </VueCountdown>
+                </template>
+                <template v-else>
+                  <span>Zaloguj się</span>
+                </template>
+              </span>
             </button>
+
             <div class="flex justify-center items-center">
               <span class="w-full border border-black"></span>
               <span class="px-4">Lub</span>
               <span class="w-full border border-black"></span>
             </div>
+
             <button @click="$router.push('/')"
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black relative">
               <IconVue iconName="KeyboardBackspace" class="absolute left-3 w-5 h-5"></IconVue>
               <span>Strona Główna</span>
             </button>
+
           </div>
         </div>
       </div>
@@ -126,8 +199,8 @@
               <!-- <p class="absolute top-2 text-white/20 inline-flex items-center text-xs">Online<span
                   class="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p> -->
             </div>
-            <div
-              class="relative group bg-gray-400 min-w-[125px] rounded-md border-2 border-dark-300 border-dashed">
+            <div @click="logUsers()"
+              class="relative group bg-gray-400 min-w-[125px] min-h-[300px] rounded-md border-2 border-dark-300 border-dashed">
             </div>
 
           </div>

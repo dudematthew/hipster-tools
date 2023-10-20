@@ -14,6 +14,7 @@
         mdiHelp,
         mdiBottleTonicSkull,
         mdiKeyboardBackspace,
+        mdiTimerSand,
     } from '@mdi/js';
 
     const icons = {
@@ -21,6 +22,7 @@
         Flask: mdiFlask,
         BottleTonickSkull: mdiBottleTonicSkull,
         KeyboardBackspace: mdiKeyboardBackspace,
+        TimerSand: mdiTimerSand,
     };
 
     export default {

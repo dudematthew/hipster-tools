@@ -1,3 +1,28 @@
+<script>
+  import { useMainStore } from '@/stores/main';
+  import { useServerStore } from '@/stores/server';
+  
+  import IconVue from '../components/other/Icon.vue';
+
+  export default {
+    components: {
+      IconVue,
+    },
+    computed: {
+      profile () {
+        return this.serverStore.profile;
+      }
+    },
+    setup() {
+      const serverStore = useServerStore();
+
+      serverStore.fetchProfile();
+
+      return { serverStore }
+    },
+  };
+</script>
+
 <template>
   <content>
       <div class="h-full flex flex-col bg-gray-100 dark:bg-gray-700 shadow-xl overflow-y-scroll">
