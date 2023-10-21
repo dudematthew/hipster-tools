@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { UserService } from "src/database/entities/user/user.service";
 import { LoginUserDto } from "./dtos/login.dto";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { AuthService } from "./auth.service";
@@ -19,8 +19,22 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    login(@Body() body: LoginUserDto) {
-        return this.authService.validateUser(body);
+    async login(@Body() body: LoginUserDto, @Res() res: Response, @Req() req: Request) {
+
+        console.info(`Logging in user with credentials: ${JSON.stringify(body)}`);
+
+        const token = await this.authService.validateUser(body);
+
+        console.info(`Adding token to cookie: ${JSON.stringify(token)}`);
+        
+        res.cookie('token', token.access_token, {
+            httpOnly: true,
+            sameSite: 'strict',
+          });
+        
+          console.info(`Added token to cookie: ${res.get('Set-Cookie')}`)
+
+        res.status(200).send('Login successful');
     }
 
     @UseGuards(AuthGuard)

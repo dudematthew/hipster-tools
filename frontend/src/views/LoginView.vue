@@ -67,6 +67,8 @@
 
         const result = await this.serverStore.login(this.chosenUser.id, this.password);
 
+        console.log(`Logging in with user ${this.chosenUser.name}, got result ${result}`);
+
         if (result == 200) {
           const mainStore = useMainStore();
           if (mainStore.previousRoute) {

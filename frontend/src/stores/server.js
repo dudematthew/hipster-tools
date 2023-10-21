@@ -18,17 +18,8 @@ const useServerStore = defineStore('server', {
     async fetchProfile() {
       console.log("Fetching profile");
 
-      if (this.token === null) {
-        console.warn("Warning: Token is null, cannot fetch profile");
-        return;
-      }
-
       try {
-        const response = await axios.get("http://localhost:3000/api/profile", {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        });
+        const response = await axios.get("http://localhost:3000/api/profile");
         console.log(response.data);
         
         // Get response status code
@@ -38,7 +29,6 @@ const useServerStore = defineStore('server', {
         if (statusCode === 200) {
           // this.isLoggedIn = true;
           this.profile = response.data;
-          
         }
       } catch (error) {
         console.error(error);
@@ -72,6 +62,8 @@ const useServerStore = defineStore('server', {
       }
     },
     async login(id, password) {
+      console.info(`Logging in with id: ${id}`);
+
       try {
         const response = await axios.post("http://localhost:3000/api/auth/login", {
           id,
@@ -85,7 +77,6 @@ const useServerStore = defineStore('server', {
 
         // If login success, set isLoggedIn to true
         if (statusCode === 200) {
-          this.token = response.data.access_token;
           await this.fetchProfile();
         }
 

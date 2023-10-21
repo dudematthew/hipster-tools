@@ -12,7 +12,6 @@ export class UserController {
     @Get('profile')
     @UseGuards(AuthGuard)
     getProfile(@Req() req): string {
-        console.log(`User ${req?.user?.id} requested profile`, req);
         return JSON.stringify(req.user, null, 4);
     }
 

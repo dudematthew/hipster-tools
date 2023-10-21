@@ -12,6 +12,8 @@ export class AuthService {
     ) {}
 
     async validateUser(credentials: { id: number, password: string }): Promise<any> {
+        console.info(`Validating user with credentials: ${JSON.stringify(credentials)}`);
+
         const user = await this.userService.findOneById(credentials.id);
 
         if (!user || user.password !== credentials.password) {

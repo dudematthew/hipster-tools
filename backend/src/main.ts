@@ -4,6 +4,7 @@ import { TypeORMSession } from './database/entities/session.entity';
 import { LoggerErrorInterceptor } from 'nestjs-pino';
 import { TypeormStore } from 'connect-typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import * as cookieParser from 'cookie-parser';
 // import * as passport from 'passport';
 import * as session from 'express-session';
 import 'dotenv/config';
@@ -60,6 +61,8 @@ async function bootstrap() {
       store: new TypeormStore().connect(sessionRepository),
     }),
   );
+
+  app.use(cookieParser());
 
   // passport.serializeUser(function(user, done) {
   //   done(null, user);
