@@ -16,10 +16,9 @@ export class SessionSerializer extends PassportSerializer {
         done(null, user);
     }
 
-    async deserializeUser(deserializedUser: UserEntity, done: (err: Error, user: UserEntity) => void) {
-        // const user = await this.userService.findByDiscordId(deserializedUser.discordId);
-        // console.log(`Deserialized user`, user);
-        // return user ? done(null, user) : done(null, null);
+    async deserializeUser(user: any, done: (err: Error, user: UserEntity) => void) {
+        console.log(`Deserializing user`, user);
+        done(null, user);
     }
 
 }

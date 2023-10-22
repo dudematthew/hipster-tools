@@ -1,19 +1,12 @@
-import { Controller, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 
 @Controller('/api/')
 export class UserController {
     constructor(
         private readonly userService: UserService,
     ) {}
-
-    // Get user info
-    @Get('profile')
-    @UseGuards(AuthGuard)
-    getProfile(@Req() req): string {
-        return JSON.stringify(req.user, null, 4);
-    }
 
     @Get('users')
     async getUsers(): Promise<string> {

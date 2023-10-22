@@ -1,35 +1,25 @@
 import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { UserModule } from "src/database/entities/user/user.module";
-import { SessionSerializer } from "./session.serializer";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "src/database/entities/user/user.entity";
-import { UserService } from "src/database/entities/user/user.service";
 import { AuthController } from "./auth.controller";
-import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
+import { LocalStrategy } from "./strategies/local.strategy";
+import { SessionSerializer } from "./session.serializer";
 
 
 @Module({
     imports: [
         UserModule,
-        JwtModule.register({
-            global: true,
-            secret: process.env.SESSION_SECRET,
-            signOptions: {
-                expiresIn: '1d',
-            },
-        }),
+        PassportModule,
     ],
     providers: [
         AuthService,
+        LocalStrategy,
         SessionSerializer,
     ],
     controllers: [
         AuthController,
     ],
-    exports: [
-        AuthService,
-        SessionSerializer,
-    ]
 })
 export class AuthModule {}

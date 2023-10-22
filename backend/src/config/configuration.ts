@@ -9,7 +9,20 @@ import {
 const YAML_CONFIG_FILENAME = 'config.yaml';
 
 export default () => {
-    return yaml.load(
-        readFileSync(join(__dirname, '../../', YAML_CONFIG_FILENAME), 'utf8'),
-    ) as Record < string, any > ;
-};
+    let config;
+    try {
+      config = yaml.load(
+        readFileSync(join(__dirname, '../', YAML_CONFIG_FILENAME), 'utf8'),
+      );
+    } catch (error) {
+        // If the file is not found, try to load from the root directory
+        if (error.code === 'ENOENT') {
+            config = yaml.load(
+            readFileSync(join(__dirname, '../../', YAML_CONFIG_FILENAME), 'utf8'),
+            );
+        } else {
+            throw error;
+        }
+    }
+    return config as Record<string, any>;
+  };

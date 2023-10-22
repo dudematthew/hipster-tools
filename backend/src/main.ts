@@ -4,8 +4,7 @@ import { TypeORMSession } from './database/entities/session.entity';
 import { LoggerErrorInterceptor } from 'nestjs-pino';
 import { TypeormStore } from 'connect-typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as cookieParser from 'cookie-parser';
-// import * as passport from 'passport';
+import * as passport from 'passport';
 import * as session from 'express-session';
 import 'dotenv/config';
 import "reflect-metadata";
@@ -62,20 +61,20 @@ async function bootstrap() {
     }),
   );
 
-  app.use(cookieParser());
-
-  // passport.serializeUser(function(user, done) {
-  //   done(null, user);
-  // });
+  passport.serializeUser((user, done) => {
+    console.log(`Serializing user`, user);
+    done(null, user);
+  });
   
-  // passport.deserializeUser(function(user, done) {
-  //   done(null, user);
-  // });
+  passport.deserializeUser((user, done) => {
+    console.log(`Deserializing user`, user);
+    done(null, user);
+  });
 
   // Initialize Passport and restore authentication state
-  // app.use(passport.initialize());
-  // app.use(passport.session());
-0
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   // Start the Forest Admin server
   await forestAdminAgent.mountOnNestJs(app).start();
 

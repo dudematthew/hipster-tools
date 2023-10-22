@@ -19,14 +19,14 @@ export class UserService {
     }
 
     async findOneById(id: number): Promise<UserEntity> {
-        return await this.userRepository.findOneBy({
-            id,
+        return await this.userRepository.findOne({
+            where: { id },
         });
     }
 
     async findOneByName(name: string): Promise<UserEntity> {
-        return await this.userRepository.findOneBy({
-            name,
+        return await this.userRepository.findOne({
+            where: { name },
         });
     }
 

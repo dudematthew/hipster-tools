@@ -19,7 +19,7 @@ const useServerStore = defineStore('server', {
       console.log("Fetching profile");
 
       try {
-        const response = await axios.get("http://localhost:3000/api/profile");
+        const response = await axios.get("http://localhost:3000/api/auth/profile");
         console.log(response.data);
         
         // Get response status code
@@ -77,6 +77,7 @@ const useServerStore = defineStore('server', {
 
         // If login success, set isLoggedIn to true
         if (statusCode === 200) {
+          console.log("Login success: ", response.data);
           await this.fetchProfile();
         }
 

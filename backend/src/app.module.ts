@@ -5,7 +5,6 @@ import { AppService } from './app.service';
 import { LoggerModule } from './logger/logger.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './database/entities/user/user.module';
-import { SessionSerializer } from './auth/session.serializer';
 import { TypeORMSession } from './database/entities/session.entity';
 import { DatabaseModule } from './database/database.module';
 import { join } from 'path';
@@ -15,6 +14,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { HealthModule } from './health/health.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -33,6 +33,8 @@ import { HealthModule } from './health/health.module';
     // AdminPanelModule, // Old admin panel
     CronModule, // Cron jobs
     HealthModule, // Health check
+    PassportModule,
+    
 
     // Entities and their modules --
     UserModule,
@@ -42,7 +44,6 @@ import { HealthModule } from './health/health.module';
   ],
   providers: [
     AppService,
-    SessionSerializer,
     TypeORMSession,
   ],
 })

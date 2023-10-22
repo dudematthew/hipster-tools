@@ -1,36 +1,24 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { UserService } from "src/database/entities/user/user.service";
-import { UserInterface } from "src/database/entities/user/user.interface";
-import { UserEntity } from "src/database/entities/user/user.entity";
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly userService: UserService,
-        private readonly jwtService: JwtService,
     ) {}
 
-    async validateUser(credentials: { id: number, password: string }): Promise<any> {
-        console.info(`Validating user with credentials: ${JSON.stringify(credentials)}`);
+    async validateUser(id: number, password: string): Promise<{}> {
+        console.info(`Validating user with credentials: ${JSON.stringify({ id, password })}`);
 
-        const user = await this.userService.findOneById(credentials.id);
+        const user = await this.userService.findOneById(id);
 
-        if (!user || user.password !== credentials.password) {
-            throw new UnauthorizedException();
-        }
+        if (!user || user.password !== password)
+            return null;
         
-        const { password, ...result } = user;
+        const { password: _, ...result } = user;
 
-        const payload = {
-            sub: user.id,
-            username: user.name,
-        };
+        console.log(result);
 
-        return {
-            access_token: await this.jwtService.signAsync(payload, {
-                secret: process.env.SESSION_SECRET,
-            }),
-        };
+        return result;
     }
 }
