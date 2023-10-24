@@ -6,11 +6,13 @@ import { TypeormStore } from 'connect-typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as passport from 'passport';
 import * as session from 'express-session';
+import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
 import "reflect-metadata";
 
 import { createAgent } from '@forestadmin/agent';
 import { createSqlDataSource } from '@forestadmin/datasource-sql';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings.js';
 
 const dbC = {
   protocol: 'mysql',
@@ -40,22 +42,25 @@ async function bootstrap() {
   // Create your SQL datasource
   forestAdminAgent.addDataSource(createSqlDataSource(connectionString));
 
-  const app = await NestFactory.create(AppModule, {
-    cors: true,
-  });
+  const app = await NestFactory.create(AppModule, { cors: {
+    credentials: true, // default: not set
+  }});
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   const sessionRepository = app.get(getRepositoryToken(TypeORMSession));
 
   app.use(
-    session({
+    session({ 
+      genid: (req) => {
+        return uuidv4(); // use UUIDs for session IDs
+      },
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
-        // Max age of the cookie is 60 days
-        maxAge: 60000 * 24 * 60,
+        // Max age of the cookie is 30 days
+        maxAge: 60000 * 24 * 30,
       },
       store: new TypeormStore().connect(sessionRepository),
     }),

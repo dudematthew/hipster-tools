@@ -31,8 +31,7 @@ const useServerStore = defineStore('server', {
           this.profile = response.data;
         }
       } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error.response);
       }
     },
     async fetchUserList() {
@@ -58,7 +57,6 @@ const useServerStore = defineStore('server', {
         }
       } catch (error) {
         console.error(error);
-        throw error;
       }
     },
     async login(id, password) {
@@ -101,7 +99,6 @@ const useServerStore = defineStore('server', {
           return error.response.status;
         } else {
           console.error(error);
-          throw error;
         }
       }
     }
